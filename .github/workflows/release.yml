@@ -1,0 +1,55 @@
+name: Release
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    env:
+      BUILD_LIB_DIR: ${{ github.workspace }}/plantuml-core/build/libs
+      INSTALL_LIB_DIR: ${{ github.workspace }}/docs
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Validate Gradle wrapper
+        uses: gradle/wrapper-validation-action@e6e38bacfdf1a337459f332974bb2327a31aaf4b
+
+      - name: Build with Gradle
+        uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
+        with:
+          arguments: :plantuml-core:build
+
+      - name: Cheerpjfy the jar into javascript
+        uses: addnab/docker-run-action@v3
+        with:
+          image: ghcr.io/evantill/docker-cheerpj:v1.0.0
+          options: -v ${{ env.BUILD_LIB_DIR }}/:/app
+          run: /opt/cheerpj/cheerpjfy.py -j 7 plantuml-core.jar
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: Package
+          path: build/libs
+
+      - name: Install artifacts into docs directory
+        run: cp ${{ env.BUILD_LIB_DIR }}/* ${{ env.INSTALL_LIB_DIR }}
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v4
+        with:
+          commit_message: "chore: install new version"
+          title: "chore: install new version"
+          body: |
+            Automated changes by github workflow ${{ env.GITHUB_JOB }}
+            from ${{ env.GITHUB_REF_NAME }} triggered by ${{ env.GITHUB_EVENT_NAME }}.
+            Merging thos PR will install the new version.

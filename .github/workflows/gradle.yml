@@ -30,7 +30,7 @@ jobs:
         distribution: 'temurin'
 
     - name: Compile
-      run: gradle --no-daemon build
+      run: gradle --no-daemon :plantuml-core:build
 
     - run: ls -lR plantuml-core/build/libs
 
