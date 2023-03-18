@@ -10,6 +10,7 @@
 rootProject.name = "io.github.plantuml"
 
 include("plantuml-core")
+include("ktor-sample")
 
 dependencyResolutionManagement {
     repositories {
