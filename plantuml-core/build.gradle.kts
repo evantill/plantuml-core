@@ -27,3 +27,8 @@ application {
 tasks.test {
     useJUnitPlatform()
 }
+
+tasks.clean {
+    dependsOn(tasks.cleanEclipse)
+    delete.add(".settings")
+}
