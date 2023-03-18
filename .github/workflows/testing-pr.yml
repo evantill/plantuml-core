@@ -1,0 +1,30 @@
+name: Testing PR
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    env:
+      BUILD_LIB_DIR: ${{ github.workspace }}/plantuml-core/build/libs
+      INSTALL_LIB_DIR: ${{ github.workspace }}/docs
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install artifacts into docs directory
+        run: cp ${{ env.INSTALL_LIB_DIR }}/plantuml-core.jar.js ${{ env.INSTALL_LIB_DIR }}/plantuml-core-v2.jar.js
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v4
+        with:
+          commit-message: "chore: install new version"
+          title: "chore: install new version"
+          body: |
+            Automated changes by github workflow ${{ env.GITHUB_JOB }}
+            from ${{ env.GITHUB_REF_NAME }} triggered by ${{ env.GITHUB_EVENT_NAME }}.
+            Merging thos PR will install the new version.
