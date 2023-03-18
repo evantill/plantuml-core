@@ -8,10 +8,6 @@ java {
     targetCompatibility = JavaVersion.VERSION_1_8
 }
 
-repositories {
-    mavenCentral()
-}
-
 dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter:5.9.1")
     implementation(fileTree("lib"))

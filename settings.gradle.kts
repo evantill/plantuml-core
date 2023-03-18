@@ -9,3 +9,9 @@
 
 rootProject.name = "plantuml-core"
 include("plantuml-core")
+
+dependencyResolutionManagement {
+    repositories {
+        mavenCentral()
+    }
+}
