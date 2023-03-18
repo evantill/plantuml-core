@@ -47,7 +47,7 @@ jobs:
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v4
         with:
-          commit_message: "chore: install new version"
+          commit-message: "chore: install new version"
           title: "chore: install new version"
           body: |
             Automated changes by github workflow ${{ env.GITHUB_JOB }}
