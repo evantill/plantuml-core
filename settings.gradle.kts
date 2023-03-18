@@ -7,7 +7,8 @@
  * in the user manual at https://docs.gradle.org/7.6/userguide/multi_project_builds.html
  */
 
-rootProject.name = "plantuml-core"
+rootProject.name = "io.github.plantuml"
+
 include("plantuml-core")
 
 dependencyResolutionManagement {
